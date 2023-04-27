@@ -10,6 +10,9 @@
     "import": "tsx -r dotenv/config scripts/import.ts"
   },
   "dependencies": {
+    "@chengsokdara/use-whisper": "^0.2.0",
+    "@ffmpeg/core": "^0.11.0",
+    "@ffmpeg/ffmpeg": "^0.11.6",
     "@pinecone-database/pinecone": "0.0.14",
     "dotenv": "^16.0.3",
     "glob": "^9.2.1",

@@ -4,7 +4,7 @@
 
 A chatbot version of myself, with all of my Notion knowledge.
 
-Feel free to check out this link to start chatting with Mad Matt[https://mad-matt-ai.vercel.app/](https://mad-matt-ai.vercel.app/)
+Feel free to check out this link to start chatting with [Mad Matt](https://mad-matt-ai.vercel.app/)
 
 ## Table of Contents
 

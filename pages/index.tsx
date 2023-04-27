@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import { useWhisper } from '@chengsokdara/use-whisper'
 
 // components
 import Chat from '@/components/Chat/Chat';
@@ -10,14 +11,36 @@ export default function Home() {
   const DEFAULT_QUERY = 'What is Javascript? Explain it to me like I\'m 5.';
 
   const [query, setQuery] = useState<string>('');
+  const [isRecording, setIsRecording] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [chats, setChats] = useState<ChatInterface[]>([]);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const {
+    transcript,
+    startRecording,
+    stopRecording,
+  } = useWhisper({
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY ?? "",
+    streaming: true,
+    timeSlice: 1_000, // 1 second
+    removeSilence: true,
+    whisperConfig: {
+      language: 'en',
+    },
+  })
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  // when transcript.text changes, set the query
+  useEffect(() => {
+    if (!transcript.text) {
+      return;
+    }
+    setQuery(transcript.text);
+  }, [transcript.text]);
 
   async function handleSearch() {
     let text = query.trim();
@@ -57,6 +80,7 @@ export default function Home() {
           text: answer.text,
         }]);
       }
+      setQuery('');
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -70,6 +94,16 @@ export default function Home() {
     } else {
       return;
     }
+  };
+
+  const handleRecord = () => {
+    setIsRecording((prevIsRecording) => !prevIsRecording);
+    startRecording();
+  };
+
+  const handleStop = () => {
+    setIsRecording((prevIsRecording) => !prevIsRecording);
+    stopRecording();
   };
 
   return (
@@ -114,14 +148,21 @@ export default function Home() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleEnter}
-            disabled={loading}
+            disabled={loading || isRecording}
           />
           <button
             onClick={handleSearch}
+            disabled={loading || isRecording}
+            className="active:scale-95 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 dark:hover:bg-slate-800 dark:hover:text-slate-100 disabled:opacity-50 dark:focus:ring-slate-400 disabled:pointer-events-none dark:focus:ring-offset-slate-900 data-[state=open]:bg-slate-100 dark:data-[state=open]:bg-slate-800 bg-slate-900 text-white hover:bg-slate-700 dark:bg-slate-50 dark:text-slate-900 h-10 py-2 px-4 mr-1"
+          >
+            Send
+          </button>
+          <button
+            onClick={isRecording ? handleStop : handleRecord}
             disabled={loading}
             className="active:scale-95 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 dark:hover:bg-slate-800 dark:hover:text-slate-100 disabled:opacity-50 dark:focus:ring-slate-400 disabled:pointer-events-none dark:focus:ring-offset-slate-900 data-[state=open]:bg-slate-100 dark:data-[state=open]:bg-slate-800 bg-slate-900 text-white hover:bg-slate-700 dark:bg-slate-50 dark:text-slate-900 h-10 py-2 px-4"
           >
-            Send
+            {isRecording ? 'Stop' : 'Record'}
           </button>
         </div>
       </div>
