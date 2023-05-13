@@ -1,4 +1,4 @@
-import { OpenAI } from 'langchain/llms';
+import { OpenAI } from 'langchain/llms/openai';
 
 export function createOpenAIClient() {
   if (!process.env.OPENAI_API_KEY) {

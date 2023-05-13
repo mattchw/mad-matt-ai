@@ -14,6 +14,7 @@ export default function Home() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [chats, setChats] = useState<ChatInterface[]>([]);
+  const [showAlert, setShowAlert] = useState<boolean>(true);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const {
@@ -119,6 +120,16 @@ export default function Home() {
     <>
       <div className="flex flex-col h-screen max-w-5xl mx-auto">
         <div className="flex flex-col gap-2 py-4">
+          {showAlert && <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+            <strong className="font-bold">{"Sorry :("}</strong>
+            <span className="block sm:inline"> My OpenAI Key is expired. With a valid OpenAI key, this chatbot should reply based on the content of my Notion</span>
+            <span
+              onClick={() => setShowAlert((prevState) => !prevState)}
+              className="absolute top-0 bottom-0 right-0 px-4 py-3"
+            >
+              <svg className="fill-current h-6 w-6 text-blue-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" /></svg>
+            </span>
+          </div>}
           <h1 className="text-2xl font-bold leading-[1.1] tracking-tighter text-center text-slate-100">
             Chat With Mad Matt
           </h1>
@@ -135,7 +146,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </div>
+      </div >
       <div className="flex w-full p-4 fixed bottom-0">
         <div className="flex w-full max-w-5xl items-center mx-auto">
           <input

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { VectorDBQAChain } from 'langchain/chains';
-import { OpenAIEmbeddings } from 'langchain/embeddings';
-import { PineconeStore } from 'langchain/vectorstores';
+import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
+import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { createOpenAIClient } from '@/helpers/openai';
 import { pinecone } from '@/helpers/pinecone';
 import { PINECONE_INDEX_NAME, PINECONE_NAME_SPACE } from '@/config/pinecone';
